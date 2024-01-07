@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Rejestracja</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+    <div class="container2">
+        <div class="image-container">
+            <img src="luggage.png" alt="Obrazek">
+        </div>
+        <div class="form-container">
+            <form action="registration_process.php" method="post">
+                <label for="username">Nazwa uzytkownika:</label>
+                <input type="text" id="username" name="username" required><br><br>
+        
+                <label for="password">Haslo:</label>
+                <input type="password" id="password" name="password" required><br><br>
+        
+                <label for="role">Rola:</label>
+                <select id="role" name="role">
+                    <option value="pracownik">Pracownik</option>
+                    <option value="gość">Gosc</option>
+                </select><br><br>
+
+                <input type="submit" value="Zarejestruj sie">
+            </form>
+            <p>Masz juz konto? <a href="login.html">Zaloguj sie</a></p>
+        </div>
+    </div>
+</body>
+</html>

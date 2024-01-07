@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Zarzadzanie rezerwacjami</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+    <div class="login-bar">
+        <a href="all_reservations.php">Rezerwacje</a>
+        <a href="login.html">Wyloguj</a>
+    </div>
+    <div class="container3">
+        <div class="image-container">
+            <img src="reception.png" alt="Obrazek">
+        </div>
+        <div class="form-container">
+            <h2>Edytuj rezerwacje</h2>
+            <form action="edit_reservation.php" method="post">
+                <label for="reservation_id">ID rezerwacji:</label>
+                <input type="text" id="reservation_id" name="reservation_id" required><br><br>
+
+                <label for="new_arrival_date">Nowa data przyjazdu:</label>
+                <input type="date" id="new_arrival_date" name="new_arrival_date"><br><br>
+
+                <label for="new_departure_date">Nowa data wyjazdu:</label>
+                <input type="date" id="new_departure_date" name="new_departure_date"><br><br>
+
+                <label for="new_room_number">Nowy numer pokoju:</label>
+                <input type="text" id="new_room_number" name="new_room_number"><br><br>
+
+                <input type="submit" value="Edytuj rezerwacje">
+            </form>
+
+            <h2>Usun rezerwacje</h2>
+            <form action="delete_reservation.php" method="post">
+                <label for="reservation_id_delete">ID rezerwacji do usuniecia:</label>
+                <input type="text" id="reservation_id_delete" name="reservation_id_delete" required><br><br>
+
+                <input type="submit" value="Usun rezerwacje">
+            </form>
+        </div>
+    </div>
+</body>
+</html>
