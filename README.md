@@ -1,5 +1,4 @@
-
-3Hotel Room Reservation Application
+#Hotel Room Reservation Application
 
 #Description
 This application enables hotel room reservations by filling out an online form. The application has two user roles: employee and guest.
