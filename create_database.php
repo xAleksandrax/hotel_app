@@ -1,48 +1,47 @@
 <?php
 $servername = "localhost";
-$username = "root"; // Domyślna nazwa użytkownika w XAMPP to "root"
-$password = "";     // Domyślne hasło w XAMPP to puste
-$dbname = "hotel";  // Nazwa bazy danych, którą chcesz utworzyć
+$username = "root"; // Default username in XAMPP is "root"
+$password = "";     // Default password in XAMPP is empty
+$dbname = "hotel";  // Name of the database you want to create
 
-
-// Nawiązanie połączenia
+// Establishing a connection
 $conn = new mysqli($servername, $username, $password, $dbname);
 
-// Sprawdzenie połączenia
+// Checking the connection
 if ($conn->connect_error) {
-    die("Błąd połączenia: " . $conn->connect_error);
+    die("Connection error: " . $conn->connect_error);
 }
 
-// Utworzenie tabeli pokoje
-$sql = "CREATE TABLE IF NOT EXISTS pokoje (
+// Creating the 'pokoje' table
+$sql_pokoje = "CREATE TABLE IF NOT EXISTS pokoje (
     id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     numer_pokoju INT(4) NOT NULL,
     typ_pokoju VARCHAR(50) NOT NULL,
     dostepnosc BOOLEAN DEFAULT true
 )";
 
-if ($conn->query($sql) === TRUE) {
-    echo "Tabela 'pokoje' została utworzona lub już istnieje.<br>";
+if ($conn->query($sql_pokoje) === TRUE) {
+    echo "Table 'pokoje' created or already exists.<br>";
 } else {
-    echo "Błąd podczas tworzenia tabeli 'pokoje': " . $conn->error . "<br>";
+    echo "Error creating 'pokoje' table: " . $conn->error . "<br>";
 }
 
-// Dodanie przykładowych danych do tabeli pokoje
-// $sql = "INSERT INTO pokoje (numer_pokoju, typ_pokoju, dostepnosc) VALUES
-//     (101, 'jednoosobowy', true),
-//     (102, 'jednoosobowy', true),
-//     (201, 'dwuosobowy', true),
-//     (202, 'dwuosobowy', true),
-//     (301, 'apartament', true),
-//     (302, 'apartament', true)";
+// Creating the 'users' table
+$sql_users = "CREATE TABLE IF NOT EXISTS users (
+    id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    role VARCHAR(20) NOT NULL
+)";
 
-// if ($conn->query($sql) === TRUE) {
-//     echo "Przykładowe pokoje zostały dodane do tabeli 'pokoje'.";
-// } else {
-//     echo "Błąd podczas dodawania przykładowych pokojów: " . $conn->error;
-// }
+if ($conn->query($sql_users) === TRUE) {
+    echo "Table 'users' created or already exists.<br>";
+} else {
+    echo "Error creating 'users' table: " . $conn->error . "<br>";
+}
 
-$sql_rezerwacje = "CREATE TABLE IF NOT EXISTS reservations (
+// Creating the 'reservations' table with foreign keys
+$sql_reservations = "CREATE TABLE IF NOT EXISTS reservations (
     id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(50) NOT NULL,
     name VARCHAR(100) NOT NULL,
@@ -51,43 +50,27 @@ $sql_rezerwacje = "CREATE TABLE IF NOT EXISTS reservations (
     adults INT NOT NULL,
     children INT NOT NULL,
     room_type VARCHAR(50) NOT NULL,
-    room_id INT(6) UNSIGNED NOT NULL,  -- Dodajemy pole przechowujące identyfikator pokoju
+    room_id INT(6) UNSIGNED NOT NULL,
     comments TEXT,
-    reservation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    reservation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (username) REFERENCES users(username) ON DELETE CASCADE,
+    FOREIGN KEY (room_id) REFERENCES pokoje(id) ON DELETE CASCADE
 )";
 
-if ($conn->query($sql_rezerwacje) === TRUE) {
-    echo "Tabela 'reservations' została utworzona lub już istnieje.<br>";
+if ($conn->query($sql_reservations) === TRUE) {
+    echo "Table 'reservations' created or already exists.<br>";
 } else {
-    echo "Błąd podczas tworzenia tabeli 'reservations': " . $conn->error . "<br>";
+    echo "Error creating 'reservations' table: " . $conn->error . "<br>";
 }
 
-// Wstawianie przykładowych danych do tabeli reservations
-// $sql_dodaj_rezerwacje = "INSERT INTO reservations (name, arrival_date, departure_date, adults, children, room_type, comments)
-// VALUES
-// ('Jan Kowalski', '2024-01-10', '2024-01-15', 2, 0, 'Pokoj jednoosobowy', 'Brak uwag'),
-// ('Anna Nowak', '2024-02-05', '2024-02-10', 1, 2, 'Apartament', 'Blisko plaży')";
-
-// if ($conn->query($sql_dodaj_rezerwacje) === TRUE) {
-//     echo "Przykładowe rezerwacje zostały dodane do tabeli 'reservations'.<br>";
-// } else {
-//     echo "Błąd podczas dodawania przykładowych rezerwacji: " . $conn->error . "<br>";
-// }
-
-$sql_uzytkownicy = "CREATE TABLE IF NOT EXISTS users (
-    id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    username VARCHAR(50) NOT NULL,
-    password VARCHAR(255) NOT NULL,
-    role VARCHAR(20) NOT NULL
-)";
-
-if ($conn->query($sql_uzytkownicy) === TRUE) {
-    echo "Tabela 'users' została utworzona lub już istnieje.";
+// Deleting orphaned reservations
+$sql_delete_orphans = "DELETE FROM reservations WHERE username NOT IN (SELECT username FROM users)";
+if ($conn->query($sql_delete_orphans) === TRUE) {
+    echo "Orphaned reservations have been deleted.<br>";
 } else {
-    echo "Błąd podczas tworzenia tabeli 'users': " . $conn->error;
+    echo "Error deleting orphaned reservations: " . $conn->error . "<br>";
 }
 
-
-// Zamknięcie połączenia
+// Closing the connection
 $conn->close();
 ?>

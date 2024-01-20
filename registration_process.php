@@ -14,7 +14,7 @@ if ($conn->connect_error) {
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $input_username = $_POST['username'];
-    $input_password = $_POST['password'];
+    $input_password = password_hash($_POST['password'], PASSWORD_DEFAULT);
     $input_role = $_POST['role'];
 
     // Sprawdzenie, czy użytkownik o podanej nazwie już istnieje
@@ -27,8 +27,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Dodanie nowego użytkownika
         $insert_user_sql = "INSERT INTO users (username, password, role) VALUES ('$input_username', '$input_password', '$input_role')";
         if ($conn->query($insert_user_sql) === TRUE) {
-            header("Location: login.html"); // Przekierowanie po udanej rejestracji
-            exit(); // Upewnij się, że po przekierowaniu nie ma już kodu do wykonania
+            header("Location: login.html"); 
+            exit(); 
         } else {
             echo "Błąd podczas rejestracji użytkownika: " . $conn->error;
         }

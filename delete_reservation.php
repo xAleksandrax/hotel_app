@@ -6,6 +6,11 @@ $username = "root"; // Twoja nazwa użytkownika bazy danych
 $password = ""; // Twoje hasło do bazy danych
 $dbname = "hotel"; // Nazwa twojej bazy danych
 
+if ($_SESSION['role'] == 'gość') {
+    echo "Access denied. You do not have the necessary role.";
+    exit();
+}
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $conn = new mysqli($servername, $username, $password, $dbname);
 

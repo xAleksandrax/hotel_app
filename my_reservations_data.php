@@ -6,6 +6,11 @@ $username = "root";
 $password = "";
 $dbname = "hotel";
 
+if ($_SESSION['role'] == 'pracownik') {
+    echo "Access denied. You do not have the necessary role.";
+    exit();
+}
+
 $conn = new mysqli($servername, $username, $password, $dbname);
 
 if ($conn->connect_error) {

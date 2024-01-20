@@ -7,8 +7,8 @@
 </head>
 <body>
 <?php
-        require_once($_SERVER['DOCUMENT_ROOT']. '/Hotel/login.html');
-        require_once($_SERVER['DOCUMENT_ROOT']. '/Hotel/function.php');
+        require_once($_SERVER['DOCUMENT_ROOT']. '/hotel_app/login.html');
+        require_once($_SERVER['DOCUMENT_ROOT']. '/hotel_app/function.php');
 
         if (isset($_POST['submit']))
             Generate();
